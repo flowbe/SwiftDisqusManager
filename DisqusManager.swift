@@ -1,9 +1,8 @@
 //
 //  DisqusManager.swift
-//  Frenchmac
 //
-//  Created by Florentin Bekier on 08/03/2015.
-//  Copyright (c) 2015 Frenchmac. All rights reserved.
+//  Created by TheFlow_ on 08/03/2015.
+//  Copyright (c) 2015 TheFlow_. All rights reserved.
 //
 
 import Foundation
