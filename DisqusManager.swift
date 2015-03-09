@@ -6,15 +6,13 @@
 //
 
 import Foundation
-import UIKit
 
 class DisqusManager {
     let publicAPIKey = "" // Your Disqus public API key
     let secretAPIKey = "" // Your Disqus secret API key
     let forum = "" // Your forum shortname
     
-    func listPostsInThread(threadID: String, completionHandler: (comments: [Comment]) -> ()) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true // Afficher l'icône de chargement dans la barre de status
+    func listPostsInThread(threadID: String, completionHandler: (comments: [Comment]!, error: NSError!) -> ()) {
         var url = NSURL(string: "http://disqus.com/api/3.0/threads/listPosts.json?api_key=\(publicAPIKey)&thread=\(threadID)")! // URL du JSON
         var request = NSURLRequest(URL: url) // Création de la requête HTTP
         var queue = NSOperationQueue()  // Création de NSOperationQueue à laquelle le bloc du gestionnaire est distribué lorsque la demande complète ou échoué
@@ -24,16 +22,7 @@ class DisqusManager {
         // Envoi de la requête asynchrone en utilisant NSURLConnection
         NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{(response: NSURLResponse!, data: NSData!, error: NSError!) ->Void in
             // Gestion des erreurs de connexion
-            if error != nil {
-                // Masquer l'icône de chargement dans la barre de status
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                
-                // Afficher le message d'erreur dans la console et avec une alertView
-                println(error.localizedDescription)
-                let errorAlert = UIAlertView(title: "Erreur", message: error.localizedDescription, delegate: self, cancelButtonTitle: "OK")
-                errorAlert.show()
-            }
-            else {
+            if error == nil {
                 // Récupération du JSON
                 let json = JSON(data: data)
                 
@@ -54,17 +43,11 @@ class DisqusManager {
                 }
             }
             
-            completionHandler(comments: comments)
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                // Masquer l'icône de chargement dans la barre de status
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            })
+            completionHandler(comments: comments, error: error)
         })
     }
     
-    func listPostsInThread(link threadLink: String, completionHandler: (comments: [Comment]) -> ()) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true // Afficher l'icône de chargement dans la barre de status
+    func listPostsInThread(link threadLink: String, completionHandler: (comments: [Comment]!, error: NSError!) -> ()) {
         var url = NSURL(string: "http://disqus.com/api/3.0/threads/listPosts.json?api_key=\(publicAPIKey)&forum=\(forum)&thread:link=\(threadLink)")! // URL du JSON
         var request = NSURLRequest(URL: url) // Création de la requête HTTP
         var queue = NSOperationQueue()  // Création de NSOperationQueue à laquelle le bloc du gestionnaire est distribué lorsque la demande complète ou échoué
@@ -74,23 +57,14 @@ class DisqusManager {
         // Envoi de la requête asynchrone en utilisant NSURLConnection
         NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{(response: NSURLResponse!, data: NSData!, error: NSError!) ->Void in
             // Gestion des erreurs de connexion
-            if error != nil {
-                // Masquer l'icône de chargement dans la barre de status
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                
-                // Afficher le message d'erreur dans la console et avec une alertView
-                println(error.localizedDescription)
-                let errorAlert = UIAlertView(title: "Erreur", message: error.localizedDescription, delegate: self, cancelButtonTitle: "OK")
-                errorAlert.show()
-            }
-            else {
+            if error == nil {
                 // Récupération du JSON
                 let json = JSON(data: data)
                 
                 for comment in json["response"].arrayValue {
                     var dateFormat = NSDateFormatter()
                     dateFormat.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-                        
+                    
                     let id = comment["id"].intValue
                     let parent = comment["parent"].int
                     let likes = comment["likes"].intValue
@@ -104,17 +78,11 @@ class DisqusManager {
                 }
             }
             
-            completionHandler(comments: comments)
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                // Masquer l'icône de chargement dans la barre de status
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            })
+            completionHandler(comments: comments, error: error)
         })
     }
     
-    func listPostsInThread(ident threadIdent: String, completionHandler: (comments: [Comment]) -> ()) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true // Afficher l'icône de chargement dans la barre de status
+    func listPostsInThread(ident threadIdent: String, completionHandler: (comments: [Comment]!, error: NSError!) -> ()) {
         var url = NSURL(string: "http://disqus.com/api/3.0/threads/listPosts.json?api_key=\(publicAPIKey)&forum=\(forum)&thread:ident=\(threadIdent)")! // URL du JSON
         var request = NSURLRequest(URL: url) // Création de la requête HTTP
         var queue = NSOperationQueue()  // Création de NSOperationQueue à laquelle le bloc du gestionnaire est distribué lorsque la demande complète ou échoué
@@ -124,16 +92,7 @@ class DisqusManager {
         // Envoi de la requête asynchrone en utilisant NSURLConnection
         NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{(response: NSURLResponse!, data: NSData!, error: NSError!) ->Void in
             // Gestion des erreurs de connexion
-            if error != nil {
-                // Masquer l'icône de chargement dans la barre de status
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                
-                // Afficher le message d'erreur dans la console et avec une alertView
-                println(error.localizedDescription)
-                let errorAlert = UIAlertView(title: "Erreur", message: error.localizedDescription, delegate: self, cancelButtonTitle: "OK")
-                errorAlert.show()
-            }
-            else {
+            if error == nil {
                 // Récupération du JSON
                 let json = JSON(data: data)
                 
@@ -154,12 +113,7 @@ class DisqusManager {
                 }
             }
             
-            completionHandler(comments: comments)
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                // Masquer l'icône de chargement dans la barre de status
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            })
+            completionHandler(comments: comments, error: error)
         })
     }
 }

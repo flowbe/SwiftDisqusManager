@@ -19,18 +19,33 @@ let disqusManager = DisqusManager()
 This function is based on the disqus **threads/listPosts** API. Use it like this:
 ```
 let threadID = "1234"
-disqusManager.listPostsInThread(threadID, { comments in
-  // do something with comments
+disqusManager.listPostsInThread(threadID, { comments, error in
+    if error != nil {
+        println("\(error.localizedDescription)")
+    }
+    else {
+        // do something with comments
+    }
 })
 // OR USE THREAD LINK
 let threadLink = "http://my-website.com/my-post/"
-disqusManager.listPostsInThread(link: threadLink, { comments in
-  // do something with comments
+disqusManager.listPostsInThread(link: threadLink, { comments, error in
+    if error != nil {
+        println("\(error.localizedDescription)")
+    }
+    else {
+        // do something with comments
+    }
 })
 // OR USE THREAD IDENTIFIER
 let threadIdent = "my-identifier"
-disqusManager.listPostsInThread(ident: threadIdent, { comments in
-  // do something with comments
+disqusManager.listPostsInThread(ident: threadIdent, { comments, error in
+    if error != nil {
+        println("\(error.localizedDescription)")
+    }
+    else {
+        // do something with comments
+    }
 })
 ```
 ### Manipulate comments
