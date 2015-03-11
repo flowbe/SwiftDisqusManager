@@ -94,10 +94,10 @@ disqusManager.createPost("Hello world!", inThread: threadID, withParent: "2345",
     // Failed !
 })
 ```
-NB: You need to be authenticated to use this function, see *Authentication*. You can check if user is authenticated with `isUserAuthenticated()`.
+NB: You need to be authenticated to use this function, see [Authentication](https://github.com/TheFlow95/SwiftDisqusManager#authentication). You can check if user is authenticated with `isUserAuthenticated()`.
 ### Authentication
 To create a post, you need to be authenticated first.
-A simple way is to have a view controller of class `DisqusComentsViewController` and protocol `DisqusComments`. Then implement `presentNewPostForm()`, which will be executed you want the user to create the post. All you have to do after is to use this function to authenticate the user and present the new post form (as you specified in `presentNewPostForm()`):
+A simple way is to have a view controller of class `DisqusComentsViewController` and protocol `DisqusComments`. Then implement `presentNewPostForm()`, which will be executed when the user create the post. All you have to do after is to use this function to authenticate the user and present the new post form (as you specified in `presentNewPostForm()`):
 ```
 showNewPostForm {
     self.presentNewPostForm()
