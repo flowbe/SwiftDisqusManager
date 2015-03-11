@@ -1,4 +1,4 @@
-# DisqusManager.swift
+# SwiftDisqusManager
 Disqus intergration into your apps in swift
 ## Installation
 Just drag all the files into your project (you might want to check "Copy items if needed")
