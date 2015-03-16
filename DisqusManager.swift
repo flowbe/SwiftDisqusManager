@@ -77,10 +77,11 @@ class DisqusManager {
                     let dislikes = comment["dislikes"].intValue
                     let isApproved = comment["isApproved"].boolValue
                     let author = comment["author"]["name"].stringValue
+                    let avatar = "http:" + comment["author"]["avatar"]["cache"].stringValue
                     let message = comment["raw_message"].stringValue
                     let date = dateFormat.dateFromString(comment["createdAt"].stringValue)!
                     
-                    comments.append(Comment(id: id, parent: parent, likes: likes, dislikes: dislikes, isApproved: isApproved, author: author, message: message, date: date))
+                    comments.append(Comment(id: id, parent: parent, likes: likes, dislikes: dislikes, isApproved: isApproved, author: author, avatar: avatar, message: message, date: date))
                 }
             }
             
@@ -105,17 +106,18 @@ class DisqusManager {
                 for comment in json["response"].arrayValue {
                     var dateFormat = NSDateFormatter()
                     dateFormat.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-                        
+                    
                     let id = comment["id"].intValue
                     let parent = comment["parent"].int
                     let likes = comment["likes"].intValue
                     let dislikes = comment["dislikes"].intValue
                     let isApproved = comment["isApproved"].boolValue
                     let author = comment["author"]["name"].stringValue
+                    let avatar = "http:" + comment["author"]["avatar"]["cache"].stringValue
                     let message = comment["raw_message"].stringValue
                     let date = dateFormat.dateFromString(comment["createdAt"].stringValue)!
                     
-                    comments.append(Comment(id: id, parent: parent, likes: likes, dislikes: dislikes, isApproved: isApproved, author: author, message: message, date: date))
+                    comments.append(Comment(id: id, parent: parent, likes: likes, dislikes: dislikes, isApproved: isApproved, author: author, avatar: avatar, message: message, date: date))
                 }
             }
             
@@ -147,10 +149,11 @@ class DisqusManager {
                     let dislikes = comment["dislikes"].intValue
                     let isApproved = comment["isApproved"].boolValue
                     let author = comment["author"]["name"].stringValue
+                    let avatar = "http:" + comment["author"]["avatar"]["cache"].stringValue
                     let message = comment["raw_message"].stringValue
                     let date = dateFormat.dateFromString(comment["createdAt"].stringValue)!
                     
-                    comments.append(Comment(id: id, parent: parent, likes: likes, dislikes: dislikes, isApproved: isApproved, author: author, message: message, date: date))
+                    comments.append(Comment(id: id, parent: parent, likes: likes, dislikes: dislikes, isApproved: isApproved, author: author, avatar: avatar, message: message, date: date))
                 }
             }
             
@@ -252,44 +255,49 @@ class DisqusManager {
     }
     
     func createPost(message: String, inThread threadID: String?, withParent parent: String? = nil, onSuccess: () -> (), onFailure: () -> ()) {
-        let url = NSURL(string: "https://disqus.com/api/3.0/posts/create.json")!
-        let request = NSMutableURLRequest(URL: url)
-        let queue = NSOperationQueue()
-        let message = message.stringByReplacingOccurrencesOfString(" ", withString: "+", options: nil, range: nil)
-        var params = "api_secret=\(userSecretAPIKey!)&message=\(message)"
-        if let threadID = threadID {
-            params += "&thread=\(threadID)"
-        }
-        if let parent = parent {
-            params += "&parent=\(parent)"
-        }
-        params += "&access_token=\(userAccessToken!)"
-        request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding)
-        request.HTTPMethod = "POST"
-        
-        // Envoi de la requête asynchrone en utilisant NSURLConnection
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{(response: NSURLResponse!, data: NSData!, error: NSError!) ->Void in
-            // Gestion des erreurs de connexion
-            if error == nil {
-                // Récupération du JSON
-                let json = JSON(data: data)
-                
-                if json["code"].int == 0 {
-                    // Envoyé
+        if isUserAuthenticated() {
+            let url = NSURL(string: "https://disqus.com/api/3.0/posts/create.json")!
+            let request = NSMutableURLRequest(URL: url)
+            let queue = NSOperationQueue()
+            let message = message.stringByReplacingOccurrencesOfString(" ", withString: "+", options: nil, range: nil).stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+            var params = "api_secret=\(userSecretAPIKey!)&message=\(message)"
+            if let threadID = threadID {
+                params += "&thread=\(threadID)"
+            }
+            if let parent = parent {
+                params += "&parent=\(parent)"
+            }
+            params += "&access_token=\(userAccessToken!)"
+            request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding)
+            request.HTTPMethod = "POST"
+            
+            // Envoi de la requête asynchrone en utilisant NSURLConnection
+            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{(response: NSURLResponse!, data: NSData!, error: NSError!) ->Void in
+                // Gestion des erreurs de connexion
+                if error == nil {
+                    // Récupération du JSON
+                    let json = JSON(data: data)
                     
-                    onSuccess()
+                    if json["code"].int == 0 {
+                        // Envoyé
+                        
+                        onSuccess()
+                    }
+                    else {
+                        let response = json["response"].stringValue
+                        println("\(response)")
+                        onFailure()
+                    }
                 }
                 else {
-                    let errorDesc = json["error_description"].stringValue
-                    println("\(errorDesc)")
+                    println("\(error.localizedDescription)")
                     onFailure()
                 }
-            }
-            else {
-                println("\(error.localizedDescription)")
-                onFailure()
-            }
-        })
+            })
+        }
+        else {
+            onFailure()
+        }
     }
 }
 
@@ -300,16 +308,18 @@ class Comment {
     var dislikes: Int
     var isApproved: Bool
     var author: String
+    var avatar: String
     var message: String
     var date: NSDate
     
-    init(id: Int, parent: Int?, likes: Int, dislikes: Int, isApproved: Bool, author: String, message: String, date: NSDate) {
+    init(id: Int, parent: Int?, likes: Int, dislikes: Int, isApproved: Bool, author: String, avatar: String, message: String, date: NSDate) {
         self.id = id
         self.parent = parent
         self.likes = likes
         self.dislikes = dislikes
         self.isApproved = isApproved
         self.author = author
+        self.avatar = avatar
         self.message = message
         self.date = date
     }

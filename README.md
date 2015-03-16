@@ -99,9 +99,7 @@ NB: You need to be authenticated to use this function, see [Authentication](http
 To create a post, you need to be authenticated first.
 A simple way is to have a view controller of class `DisqusComentsViewController` and protocol `DisqusComments`. Then implement `presentNewPostForm()`, which will be executed when the user create the post. All you have to do after is to use this function to authenticate the user and present the new post form (as you specified in `presentNewPostForm()`):
 ```
-showNewPostForm {
-    self.presentNewPostForm()
-}
+showNewPostForm(presentNewPostForm)
 ```
 And that's it!
 ### Manipulate comments

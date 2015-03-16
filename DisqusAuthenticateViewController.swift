@@ -17,7 +17,7 @@ class DisqusAuthenticateViewController: UIViewController, UIWebViewDelegate, UIA
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         self.navigationItem.title = "Connexion à Disqus"
         
@@ -30,7 +30,7 @@ class DisqusAuthenticateViewController: UIViewController, UIWebViewDelegate, UIA
         
         webView.loadRequest(NSURLRequest(URL: authorizationURL))
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -76,12 +76,12 @@ class DisqusAuthenticateViewController: UIViewController, UIWebViewDelegate, UIA
             if let code = params["code"] {
                 disqusManager.authenticate(code, onSuccess: {
                     self.complete()
-                }, onFailure: {
-                    let errorAlert = UIAlertView(title: "Erreur", message: "Une erreur s'est produite lors de la connexion à Disqus. Merci de réessayer plus tard.", delegate: self, cancelButtonTitle: "OK")
-                    errorAlert.delegate = self
-                    dispatch_async(dispatch_get_main_queue(), {
-                        errorAlert.show()
-                    })
+                    }, onFailure: {
+                        let errorAlert = UIAlertView(title: "Erreur", message: "Une erreur s'est produite lors de la connexion à Disqus. Merci de réessayer plus tard.", delegate: self, cancelButtonTitle: "OK")
+                        errorAlert.delegate = self
+                        dispatch_async(dispatch_get_main_queue(), {
+                            errorAlert.show()
+                        })
                 })
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false // Masquer l'icône de chargement dans la barre de status
                 return false
@@ -97,15 +97,15 @@ class DisqusAuthenticateViewController: UIViewController, UIWebViewDelegate, UIA
             self.dismissViewControllerAnimated(true, completion: nil)
         }
     }
-
+    
     /*
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // Get the new view controller using segue.destinationViewController.
+    // Pass the selected object to the new view controller.
     }
     */
-
+    
 }
