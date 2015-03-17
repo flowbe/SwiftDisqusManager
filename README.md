@@ -111,6 +111,7 @@ The following properties are available:
 * `dislikes: Int`
 * `isApproved: Bool`
 * `author: String`
+* `avatar: String`
 * `message: String`
 * `date: NSDate`
 
@@ -119,9 +120,9 @@ Each thread is an instance of `Thread` class.
 * `id: Int`
 * `title: String`
 
-## What's next ?
-I will complete this project soon. The comming functions are:
-* listThreadsInForum
+## To do
+* Update thread class
+* listThreadsInForum function
+* Sample app
 
-I will also create a sample app.
 If you have a special request, please contact me.
