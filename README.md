@@ -115,7 +115,7 @@ The following properties are available:
 * `message: String`
 * `date: NSDate`
 
-### Manipulate thread
+### Manipulate threads
 Each thread is an instance of `Thread` class.
 * `id: Int`
 * `title: String`
