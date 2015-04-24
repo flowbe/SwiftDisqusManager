@@ -126,7 +126,10 @@ class DisqusManager {
     }
     
     func listPostsInThread(ident threadIdent: String, completionHandler: (comments: [Comment]!, error: NSError!) -> ()) {
-        var url = NSURL(string: "http://disqus.com/api/3.0/threads/listPosts.json?api_key=\(publicAPIKey)&forum=\(forum)&thread:ident=\(threadIdent)")! // URL du JSON
+        var urlString: String = "http://disqus.com/api/3.0/threads/listPosts.json?api_key=\(publicAPIKey)&forum=\(forum)&thread:ident=\(threadIdent)"
+      
+        var url = NSURL(string: urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)! // URL du JSON
+      
         var request = NSURLRequest(URL: url) // Création de la requête HTTP
         var queue = NSOperationQueue()  // Création de NSOperationQueue à laquelle le bloc du gestionnaire est distribué lorsque la demande complète ou échoué
         
