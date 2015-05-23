@@ -5,14 +5,14 @@ Just drag all the files into your project (you might want to check "Copy items i
 ## Usage
 For now, only 3 functions are available but I will add more soon.
 ### Getting started
-Firstly, you have to set your public API key, secret API key, forum shortname and redirect URL (for auth) in DisqusManager.swift:
+Firstly, you have to set your settings in the DisqusSettings.swift file. They are all needed for a good functioning.
+
+Then, you just have to use the shared manager:
 ```
-let publicAPIKey = "" // Your Disqus public API key
-let secretAPIKey = "" // Your Disqus secret API key
-let forum = "" // Your forum shortname
-let authRedirectURL = "" // Your redirect URL
+let disqusManager = DisqusManager.sharedManager()
 ```
-Then, you just have to instantiate the class:
+
+But you can also instantiate your own class:
 ```
 let disqusManager = DisqusManager()
 ```

@@ -3,16 +3,22 @@
 //  SwiftDisqusManager
 //
 //  Created by TheFlow_ on 08/03/2015.
-//  Copyright (c) 2015 TheFlow_. All rights reserved.
 //
 
 import Foundation
 
 class DisqusManager {
-    let publicAPIKey = "" // Your Disqus public API key
-    let secretAPIKey = "" // Your Disqus secret API key
-    let forum = "" // Your forum shortname
-    let authRedirectURL = "" // Your redirect url
+    let publicAPIKey = DisqusSettings.publicAPIKey
+    let secretAPIKey = DisqusSettings.secretAPIKey
+    let forum = DisqusSettings.forum
+    let authRedirectURL = DisqusSettings.authRedirectURL
+    
+    let appLabel = DisqusSettings.appLabel
+    let appOrganization = DisqusSettings.appOrganization
+    let appDescription = DisqusSettings.appDescription
+    let appWebsite = DisqusSettings.appWebsite
+    let appTermsURL = DisqusSettings.appTermsURL
+    let appCallbackURL = DisqusSettings.appCallbackURL
     
     private var isAuthenticated: Bool? {
         get {
@@ -45,6 +51,14 @@ class DisqusManager {
         set {
             NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: "SwiftDisqusUserAccessToken")
         }
+    }
+    
+    private struct Constants {
+        static let sharedManager = DisqusManager()
+    }
+    
+    class func sharedManager() -> DisqusManager {
+        return Constants.sharedManager
     }
     
     init() {
@@ -219,7 +233,7 @@ class DisqusManager {
         let url = NSURL(string: "https://disqus.com/api/oauth/2.0/api_key/")!
         let request = NSMutableURLRequest(URL: url)
         let queue = NSOperationQueue()
-        let params = "grant_type=api_key&redirect_uri=\(authRedirectURL)&code=\(code)&application[label]=Frenchmac&application[description]=frenchmac&application[website]=http://www.frenchmac.com/&application[organization]=Frenchmac&application[terms_url]=http://www.frenchmac.com/terms&application[callback_url]=http://www.frenchmac.com/callback"
+        let params = "grant_type=api_key&redirect_uri=\(authRedirectURL)&code=\(code)&application[label]=\(appLabel)&application[description]=\(appDescription)&application[website]=\(appWebsite)&application[organization]=\(appOrganization)&application[terms_url]=\(appTermsURL)&application[callback_url]=\(appCallbackURL)"
         request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding)
         request.HTTPMethod = "POST"
         
